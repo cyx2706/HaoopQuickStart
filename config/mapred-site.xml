@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<configuration>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+    <property>
+        <name>mapreduce.job.end-notification.url</name>
+        <!--flask server-->
+        <value>http://hadoop-master:2706/?jobId=$jobId&amp;jobStatus=$jobStatus</value>
+        <description>Indicates url which will be called on completion of job to inform
+            end status of job.
+            User can give at most 2 variables with URI : $jobId and $jobStatus.
+            If they are present in URI, then they will be replaced by their
+            respective values.
+        </description>
+    </property>
+    <property>
+        <name>mapreduce.job.end-notification.retry.attempts</name>
+        <value>0</value>
+        <description>The number of times the submitter of the job wants to retry job
+            end notification if it fails. This is capped by
+            mapreduce.job.end-notification.max.attempts</description>
+    </property>
+    <property>
+        <name>mapreduce.job.end-notification.max.attempts</name>
+        <value>5</value>
+        <final>true</final>
+        <description>The maximum number of times a URL will be read for providing job
+            end notification. Cluster administrators can set this to limit how long
+            after end of a job, the Application Master waits before exiting. Must be
+            marked as final to prevent users from overriding this.
+        </description>
+    </property>
+    <property>
+        <name>mapreduce.job.end-notification.retry.interval</name>
+        <value>1000</value>
+        <description>The number of milliseconds the submitter of the job wants to
+            wait before job end notification is retried if it fails. This is capped by
+            mapreduce.job.end-notification.max.retry.interval</description>
+    </property>
+    <property>
+        <name>mapreduce.job.end-notification.max.retry.interval</name>
+        <value>5000</value>
+        <final>true</final>
+        <description>The maximum amount of time (in milliseconds) to wait before
+            retrying job end notification. Cluster administrators can set this to
+            limit how long the Application Master waits before exiting. Must be marked
+            as final to prevent users from overriding this.</description>
+    </property>
+</configuration>
