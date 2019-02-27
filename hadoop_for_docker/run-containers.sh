@@ -9,7 +9,6 @@ sudo docker network create --subnet=172.18.0.0/16 hadoop &> /dev/null
 sudo docker rm -f hadoop-master &> /dev/null
 echo "start hadoop-master container..."
 sudo docker run -itd \
-		-v /media/sf_scrapy_sources:/var/python \
 		--net=hadoop \
 		--ip 172.18.0.2 \
 		-p 50070:50070 \
@@ -26,7 +25,6 @@ do
 	sudo docker rm -f hadoop-slave$i &> /dev/null
 	echo "start hadoop-slave$i container..."
 	sudo docker run -itd \
-			-v /media/sf_scrapy_sources:/var/python \
 			--net=hadoop \
 		    --ip 172.18.0.$j \
 	        --name hadoop-slave$i \

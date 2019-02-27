@@ -1,4 +1,5 @@
 #!/bin/bash
+#使用方法
 set -e
 config_path="./config"
 for node in $*
