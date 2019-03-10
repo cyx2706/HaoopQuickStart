@@ -18,4 +18,5 @@
 - 修改了mapred-site.xml:
     1. 添加了任务完成回调属性等
 # 其他
-详见hadoop_for_centos7.6及hadoop_for_docker下README.md
+- 详见hadoop_for_centos7.6及hadoop_for_docker下README.md
+- 或联系 cyx2706@163.
