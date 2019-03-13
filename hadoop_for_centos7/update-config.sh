@@ -1,7 +1,8 @@
 #!/bin/bash
 #使用方法
 set -e
-config_path="./config"
+current_path=`pwd`
+config_path="$current_path/../config"
 for node in $*
 do
     scp_remote="root@$node"

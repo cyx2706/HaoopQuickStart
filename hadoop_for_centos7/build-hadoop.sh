@@ -1,8 +1,7 @@
 #!/bin/bash
-
-
-
 set -e
+
+current_path=`pwd`
 
 echo "shutdown the fire wall"
 #¹Ø±Õ·À»ðÇ½
@@ -10,13 +9,16 @@ systemctl stop firewalld
 systemctl disable firewalld
 
 echo "building java ..."
-yum install java-1.7.0-openjdk-devel.x86_64 -y
-echo "JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.201-2.6.16.1.el7_6.x86_64" >> /etc/profile
+tar -xzvf $current_path/jdk-8u201-linux-x64.tar.gz -C ~/
+mv ~/jdk1.8.0_201 /usr/local/jdk1.8.0_201
+
+echo "JAVA_HOME=/usr/local/jdk1.8.0_201" >> /etc/profile
 echo "JRE_HOME=\$JAVA_HOME/jre" >> /etc/profile
-echo "CLASS_PATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib" >> /etc/profile
+echo "CLASS_PATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar:\$JRE_HOME/lib" >> /etc/profile
 echo "PATH=\$PATH:\$JAVA_HOME/bin:\$JRE_HOME/bin" >> /etc/profile
 source /etc/profile
-ln -s $JAVA_HOME $JAVA_HOME/../java-7-openjdk-amd64
+mkdir /usr/lib/jvm
+ln -s $JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 
 echo "ready to build hadoop ..."
 yum install wget -y
@@ -35,10 +37,10 @@ mkdir -p ~/hdfs/datanode && \
 mkdir $HADOOP_HOME/logs
 
 
-config_path="../config"
+config_path="$current_path/../config"
 
 \cp $config_path/ssh_config ~/.ssh/config && \
-    \cp $config_path/hadoop-env.sh /usr/local/hadoop/etc/hadoop/hadoop-env.sh && \
+    \cp $config_path/hadoop-env.2.0.sh /usr/local/hadoop/etc/hadoop/hadoop-env.sh && \
     \cp $config_path/hdfs-site.xml $HADOOP_HOME/etc/hadoop/hdfs-site.xml && \
     \cp $config_path/core-site.xml $HADOOP_HOME/etc/hadoop/core-site.xml && \
     \cp $config_path/mapred-site.xml $HADOOP_HOME/etc/hadoop/mapred-site.xml && \
@@ -50,11 +52,12 @@ config_path="../config"
     \cp $config_path/run-wordcount.sh ~/run-wordcount.sh
 
 chmod +x ~/start-hadoop.sh && \
+    chmod +x ~/stop-hadoop.sh && \
+    chmod +x ~/restart-hadoop.sh && \
     chmod +x ~/run-wordcount.sh && \
     chmod +x $HADOOP_HOME/sbin/start-dfs.sh && \
     chmod +x $HADOOP_HOME/sbin/start-yarn.sh
 
 # format namenode
-/usr/local/hadoop/bin/hdfs namenode -format
+$HADOOP_HOME/bin/hdfs namenode -format
 echo "hadoop build success!"
-exit 1
